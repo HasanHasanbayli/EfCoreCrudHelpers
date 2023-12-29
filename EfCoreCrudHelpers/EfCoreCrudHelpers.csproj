@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>EfCore.Crud.Helpers</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>Hasan Hasanbayli</Authors>
+        <Company>Hasan Hasanbayli</Company>
+        <Description>EF Core CRUD Helpers</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>EF Core, CRUD, Helpers</PackageTags>
+        <RepositoryUrl></RepositoryUrl>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0"/>
+    </ItemGroup>
+
+</Project>
