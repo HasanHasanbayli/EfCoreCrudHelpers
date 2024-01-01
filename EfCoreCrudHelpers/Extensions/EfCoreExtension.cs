@@ -130,7 +130,7 @@ public static class EfCoreExtension
     }
 
     public static async Task<TEntity> AddEntityAsync<TEntity>(this DbContext context,
-        TEntity entity, CancellationToken cancellationToken)
+        TEntity entity, CancellationToken cancellationToken = default)
         where TEntity : class
     {
         await context.Set<TEntity>().AddAsync(entity, cancellationToken);
@@ -152,7 +152,7 @@ public static class EfCoreExtension
     }
 
     public static async Task<List<TEntity>> AddEntityRangeAsync<TEntity>(this DbContext context,
-        List<TEntity> entities, CancellationToken cancellationToken)
+        List<TEntity> entities, CancellationToken cancellationToken = default)
         where TEntity : class
     {
         await context.Set<TEntity>().AddRangeAsync(entities, cancellationToken);
@@ -174,7 +174,7 @@ public static class EfCoreExtension
     }
 
     public static async Task<TEntity> UpdateEntityAsync<TEntity>(this DbContext context,
-        TEntity entity, CancellationToken cancellationToken)
+        TEntity entity, CancellationToken cancellationToken = default)
         where TEntity : class
     {
         context.Set<TEntity>().Update(entity);
@@ -196,7 +196,7 @@ public static class EfCoreExtension
     }
 
     public static async Task<List<TEntity>> UpdateEntityRangeAsync<TEntity>(this DbContext context,
-        List<TEntity> entities, CancellationToken cancellationToken)
+        List<TEntity> entities, CancellationToken cancellationToken = default)
         where TEntity : class
     {
         context.Set<TEntity>().UpdateRange(entities);
@@ -218,7 +218,7 @@ public static class EfCoreExtension
     }
 
     public static async Task<TEntity> DeleteEntityAsync<TEntity>(this DbContext context,
-        TEntity entity, CancellationToken cancellationToken)
+        TEntity entity, CancellationToken cancellationToken = default)
         where TEntity : class
     {
         context.Set<TEntity>().Remove(entity);
@@ -240,7 +240,7 @@ public static class EfCoreExtension
     }
 
     public static async Task<List<TEntity>> DeleteEntityRangeAsync<TEntity>(this DbContext context,
-        List<TEntity> entities, CancellationToken cancellationToken)
+        List<TEntity> entities, CancellationToken cancellationToken = default)
         where TEntity : class
     {
         context.Set<TEntity>().RemoveRange(entities);
