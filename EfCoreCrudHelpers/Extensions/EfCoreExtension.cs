@@ -73,7 +73,7 @@ public static class EfCoreExtension
         return await queryable.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
-    public static async Task<IList<TEntity>> GetListAsync<TEntity>(this DbSet<TEntity> entity,
+    public static async Task<List<TEntity>> GetListAsync<TEntity>(this DbSet<TEntity> entity,
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
