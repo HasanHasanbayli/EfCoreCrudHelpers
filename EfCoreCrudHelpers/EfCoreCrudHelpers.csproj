@@ -8,7 +8,7 @@
 
     <PropertyGroup>
         <PackageId>EfCore.Crud.Helpers</PackageId>
-        <Version>1.0.7</Version>
+        <Version>1.0.8</Version>
         <Authors>Hasan Hasanbayli</Authors>
         <Company>Hasan Hasanbayli</Company>
         <Description>EF Core CRUD Helpers</Description>
