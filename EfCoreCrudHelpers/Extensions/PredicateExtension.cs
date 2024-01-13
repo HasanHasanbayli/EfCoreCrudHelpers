@@ -10,7 +10,8 @@ public static class PredicateExtension
     {
         ParameterExpression param = expr1.Parameters[0];
 
-        BinaryExpression body = Expression.AndAlso(expr1.Body, expr2.Body.ReplaceParameter(expr2.Parameters[0], param));
+        BinaryExpression body = Expression.AndAlso(left: expr1.Body, right: expr2.Body
+            .ReplaceParameter(source: expr2.Parameters[0], target: param));
 
         return Expression.Lambda<Func<T, bool>>(body, param);
     }
@@ -21,7 +22,8 @@ public static class PredicateExtension
     {
         ParameterExpression param = expr1.Parameters[0];
 
-        BinaryExpression body = Expression.OrElse(expr1.Body, expr2.Body.ReplaceParameter(expr2.Parameters[0], param));
+        BinaryExpression body = Expression.OrElse(left: expr1.Body, right: expr2.Body
+            .ReplaceParameter(source: expr2.Parameters[0], target: param));
 
         return Expression.Lambda<Func<T, bool>>(body, param);
     }
