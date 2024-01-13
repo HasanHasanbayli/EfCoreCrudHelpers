@@ -40,7 +40,7 @@ public static class QueryableDynamicFilterExtensions
     {
         List<Filter> filters = GetAllFilters(filter);
 
-        List<string?> values = filters.Select(f => f.Value).ToList();
+        List<object?> values = filters.Select(f => f.Value).ToList();
 
         string where = Transform(filter, filters);
 
@@ -98,22 +98,23 @@ public static class QueryableDynamicFilterExtensions
             throw new ArgumentException(message: "Invalid Operator");
 
         int index = filters.IndexOf(filter);
+        string comparison = Operators[filter.Operator];
         StringBuilder where = new();
 
-        if (!string.IsNullOrEmpty(filter.Value))
+        if (filter.Value is not null)
         {
             if (filter.Operator == "doesNotContain")
-                where.Append($"(!np({filter.Field}).{value}(@{index}))");
+                where.Append($"(!np({filter.Field}).{comparison}(@{index}))");
 
-            else if (value is "StartsWith" or "EndsWith" or "Contains")
-                where.Append($"(np({filter.Field}).{value}(@{index}))");
+            else if (comparison is "StartsWith" or "EndsWith" or "Contains")
+                where.Append($"(np({filter.Field}).{comparison}(@{index}))");
 
             else
-                where.Append($"np({filter.Field}) {value} @{index}");
+                where.Append($"np({filter.Field}) {comparison} @{index}");
         }
         else if (filter.Operator is "isNull" or "isNotNull")
         {
-            where.Append($"np({filter.Field}) {value}");
+            where.Append($"np({filter.Field}) {comparison}");
         }
 
         if (filter.Logic is null || !filter.Filters.Any()) return where.ToString();
