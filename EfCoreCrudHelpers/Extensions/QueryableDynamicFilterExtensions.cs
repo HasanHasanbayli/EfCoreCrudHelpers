@@ -40,7 +40,7 @@ public static class QueryableDynamicFilterExtensions
     {
         List<Filter> filters = GetAllFilters(filter);
 
-        List<object?> values = filters.Select(f => f.Value).ToList();
+        object?[] values = filters.Select(f => f.Value).ToArray();
 
         string where = Transform(filter, filters);
 
