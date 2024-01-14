@@ -49,7 +49,9 @@ public static class PredicateExtension
     {
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            return node == source ? target : base.VisitParameter(node);
+            return node == source 
+                ? target 
+                : base.VisitParameter(node);
         }
     }
 }
