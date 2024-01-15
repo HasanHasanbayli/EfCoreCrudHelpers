@@ -41,7 +41,7 @@ The `PredicateExtension` is a static class that provides extension methods for `
 1. Add the `EfCore.Crud.Helpers` package to your project.
 
 ```bash
-dotnet add package EfCore.Crud.Helpers --version 1.0.8
+dotnet add package EfCore.Crud.Helpers --version 1.0.9
 ```
 
 ## Usage
