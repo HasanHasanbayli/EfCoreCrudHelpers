@@ -30,6 +30,11 @@ The `PredicateExtension` is a static class that provides extension methods for `
 - `Or<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)`: Combines two expressions with a logical OR operator.
 - `Not<T>(this Expression<Func<T, bool>> expr)`: Negates an expression with a logical NOT operator.
 
+## Support
+If you find this project helpful or just want to support my work, consider buying me a coffee. Your support is greatly appreciated!
+
+<a href="https://www.buymeacoffee.com/hasanhasanbayli" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" width="200"  ></a>
+
 ## Getting Started
 
 ### Prerequisites
@@ -41,7 +46,7 @@ The `PredicateExtension` is a static class that provides extension methods for `
 1. Add the `EfCore.Crud.Helpers` package to your project.
 
 ```bash
-dotnet add package EfCore.Crud.Helpers --version 1.0.8
+dotnet add package EfCore.Crud.Helpers --version 1.1.0
 ```
 
 ## Usage
@@ -49,47 +54,61 @@ dotnet add package EfCore.Crud.Helpers --version 1.0.8
 Here are examples of how to use the `QueryableDynamicFilterExtensions` and `PredicateExtension` classes in your code:
 
 ```csharp
-using EfCoreCrudHelpers.Dynamic;
+using System.Linq.Expressions;
 using EfCoreCrudHelpers.Extensions;
-using System.Linq;
 
-public class SampleUsage
+public class SampleClass
 {
-    public void UsePredicateExtensionWithAnd(Expression<Func<MyEntity, bool>> expr1, Expression<Func<MyEntity, bool>> expr2)
+    private int Id { get; init; }
+    public string Name { get; init; }
+
+    private readonly List<SampleClass> _list =
+    [
+        new SampleClass {Id = 1, Name = "Name1"},
+        new SampleClass {Id = 2, Name = "Name2"},
+        new SampleClass {Id = 3, Name = "Name3"},
+        new SampleClass {Id = 4, Name = "Name4"},
+        new SampleClass {Id = 5, Name = "Name5"}
+    ];
+
+    public void UsePredicateExtensions()
     {
-        var combinedExpr = expr1.And(expr2);
+        Expression<Func<SampleClass, bool>> predicate = sampleClass => sampleClass.Id == 1;
+        Expression<Func<SampleClass, bool>> predicate2 = sampleClass => sampleClass.Id == 2;
+        Expression<Func<SampleClass, bool>> predicate3 = sampleClass => sampleClass.Id == 3;
+
+        Expression<Func<SampleClass, bool>> combinedPredicateWithAnd = predicate.And(predicate2);
+        Expression<Func<SampleClass, bool>> combinedPredicateWithOr = predicate.Or(predicate2);
+        Expression<Func<SampleClass, bool>> combinedPredicateWithNot = predicate3.Not();
+
+        IQueryable<SampleClass> result = _list.AsQueryable()
+            .Where(combinedPredicateWithAnd.And(combinedPredicateWithOr).Or(combinedPredicateWithNot));
     }
 
-    public void UsePredicateExtensionWithOr(Expression<Func<MyEntity, bool>> expr1, Expression<Func<MyEntity, bool>> expr2)
+    public void UseQueryableDynamicFilterExtensions()
     {
-        var combinedExpr = expr1.Or(expr2);
-    }
-
-    public void UsePredicateExtensionWithNot(Expression<Func<MyEntity, bool>> expr)
-    {
-        var negatedExpr = expr.Not();
-    }
-
-    public void UseQueryableDynamicFilterExtensions(IQueryable<MyEntity> query)
-    {
-        var dynamicModel = new Dynamic
+        Dynamic dynamicModel = new()
         {
             Sort = new List<Sort>
             {
-                new Sort { Field = "Name", Dir = "asc" }
+                new() {Field = "Name", Dir = "asc"}
             },
             Filter = new Filter
             {
+                Field = "Country",
+                Operator = "eq",
+                Value = "USA",
+
                 Logic = "and",
+
                 Filters = new List<Filter>
                 {
-                    new Filter { Field = "Age", Operator = "gt", Value = "30" },
-                    new Filter { Field = "Country", Operator = "eq", Value = "USA" }
+                    new() {Field = "Age", Operator = "gt", Value = "30"}
                 }
             }
         };
 
-        var result = query.ToDynamic(dynamicModel);
+        IQueryable<SampleClass> result = _list.AsQueryable().ToDynamic(dynamicModel);
     }
 }
 ```
