@@ -8,7 +8,7 @@
 
     <PropertyGroup>
         <PackageId>EfCore.Crud.Helpers</PackageId>
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
         <Authors>Hasan Hasanbayli</Authors>
         <Company>Hasan Hasanbayli</Company>
         <Description>EF Core CRUD Helpers</Description>
@@ -26,8 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0"/>
-        <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.7"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+        <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.8" />
     </ItemGroup>
 
 </Project>

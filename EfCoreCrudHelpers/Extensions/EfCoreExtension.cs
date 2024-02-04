@@ -9,7 +9,8 @@ namespace EfCoreCrudHelpers.Extensions;
 public static class EfCoreExtension
 {
     public static TEntity? Get<TEntity>(this DbSet<TEntity> entity,
-        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
         bool enableTracking = true) where TEntity : class
     {
@@ -17,9 +18,13 @@ public static class EfCoreExtension
 
         if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        if (include != null) queryable = include(queryable);
+        if (orderBy != null) queryable = orderBy(queryable);
 
-        return queryable.FirstOrDefault(predicate);
+        if (include is not null) queryable = include(queryable);
+
+        return predicate is null
+            ? queryable.FirstOrDefault()
+            : queryable.FirstOrDefault(predicate);
     }
 
     public static List<TEntity> GetList<TEntity>(this DbSet<TEntity> entity,
@@ -107,15 +112,23 @@ public static class EfCoreExtension
     }
 
     public static async Task<TEntity?> GetAsync<TEntity>(this DbSet<TEntity> entity,
-        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        bool enableTracking = true,
         CancellationToken cancellationToken = default) where TEntity : class
     {
         IQueryable<TEntity> queryable = entity.AsQueryable();
 
-        if (include != null) queryable = include(queryable);
+        if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        return await queryable.FirstOrDefaultAsync(predicate, cancellationToken);
+        if (orderBy != null) queryable = orderBy(queryable);
+
+        if (include is not null) queryable = include(queryable);
+
+        return predicate is null
+            ? await queryable.FirstOrDefaultAsync(cancellationToken)
+            : await queryable.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
     public static async Task<List<TEntity>> GetListAsync<TEntity>(this DbSet<TEntity> entity,
@@ -152,7 +165,7 @@ public static class EfCoreExtension
         IQueryable<TEntity> queryable = entity.AsQueryable().ToDynamic(dynamic);
 
         if (predicate != null) queryable = queryable.Where(predicate);
-        
+
         if (size != default) queryable = queryable.Take(size);
 
         if (!enableTracking) queryable = queryable.AsNoTracking();
