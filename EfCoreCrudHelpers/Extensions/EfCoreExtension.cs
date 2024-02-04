@@ -9,28 +9,28 @@ namespace EfCoreCrudHelpers.Extensions;
 public static class EfCoreExtension
 {
     public static TEntity? Get<TEntity>(this DbSet<TEntity> entity,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         bool enableTracking = true) where TEntity : class
     {
         IQueryable<TEntity> queryable = entity.AsQueryable();
 
         if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        if (orderBy != null) queryable = orderBy(queryable);
+        if (orderBy != default) queryable = orderBy(queryable);
 
-        if (include is not null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
-        return predicate is null
+        return predicate == default
             ? queryable.FirstOrDefault()
             : queryable.FirstOrDefault(predicate);
     }
 
     public static List<TEntity> GetList<TEntity>(this DbSet<TEntity> entity,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         int size = default,
         bool enableTracking = true) where TEntity : class
     {
@@ -38,21 +38,21 @@ public static class EfCoreExtension
 
         if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        if (include != null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
-        if (predicate != null) queryable = queryable.Where(predicate);
+        if (predicate != default) queryable = queryable.Where(predicate);
 
         if (size != default) queryable = queryable.Take(size);
 
-        if (orderBy != null) queryable = orderBy(queryable);
+        if (orderBy != default) queryable = orderBy(queryable);
 
         return queryable.ToList();
     }
 
     public static Paginate<TEntity> GetPaginatedList<TEntity>(this DbSet<TEntity> entity,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         int index = 1,
         int size = 10,
         bool enableTracking = true) where TEntity : class
@@ -61,60 +61,60 @@ public static class EfCoreExtension
 
         if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        if (include != null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
-        if (predicate != null) queryable = queryable.Where(predicate);
+        if (predicate != default) queryable = queryable.Where(predicate);
 
-        if (orderBy != null) queryable = orderBy(queryable);
+        if (orderBy != default) queryable = orderBy(queryable);
 
         return queryable.ToPaginate(index, size, from: 1);
     }
 
     public static List<TEntity> GetDynamicList<TEntity>(this DbSet<TEntity> entity,
         DynamicModel dynamic,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         int size = default,
         bool enableTracking = true) where TEntity : class
     {
         IQueryable<TEntity> queryable = entity.AsQueryable().ToDynamic(dynamic);
 
-        if (predicate != null) queryable = queryable.Where(predicate);
+        if (!enableTracking) queryable = queryable.AsNoTracking();
+
+        if (predicate != default) queryable = queryable.Where(predicate);
 
         if (size != default) queryable = queryable.Take(size);
 
-        if (!enableTracking) queryable = queryable.AsNoTracking();
-
-        if (include != null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
         return queryable.ToList();
     }
 
     public static Paginate<TEntity> GetPaginatedDynamicList<TEntity>(this DbSet<TEntity> entity,
         DynamicModel dynamic,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         int index = 1,
         int size = 10,
         bool enableTracking = true) where TEntity : class
     {
         IQueryable<TEntity> queryable = entity.AsQueryable().ToDynamic(dynamic);
 
-        if (predicate != null) queryable = queryable.Where(predicate);
+        if (!enableTracking) queryable = queryable.AsNoTracking();
+
+        if (predicate != default) queryable = queryable.Where(predicate);
 
         if (size != default) queryable = queryable.Take(size);
 
-        if (!enableTracking) queryable = queryable.AsNoTracking();
-
-        if (include != null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
         return queryable.ToPaginate(index, size, from: 1);
     }
 
     public static async Task<TEntity?> GetAsync<TEntity>(this DbSet<TEntity> entity,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         bool enableTracking = true,
         CancellationToken cancellationToken = default) where TEntity : class
     {
@@ -122,19 +122,19 @@ public static class EfCoreExtension
 
         if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        if (orderBy != null) queryable = orderBy(queryable);
+        if (orderBy != default) queryable = orderBy(queryable);
 
-        if (include is not null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
-        return predicate is null
+        return predicate == default
             ? await queryable.FirstOrDefaultAsync(cancellationToken)
             : await queryable.FirstOrDefaultAsync(predicate, cancellationToken);
     }
 
     public static async Task<List<TEntity>> GetListAsync<TEntity>(this DbSet<TEntity> entity,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         int size = default,
         bool enableTracking = true,
         CancellationToken cancellationToken = default) where TEntity : class
@@ -143,42 +143,42 @@ public static class EfCoreExtension
 
         if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        if (include != null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
-        if (predicate != null) queryable = queryable.Where(predicate);
+        if (predicate != default) queryable = queryable.Where(predicate);
 
         if (size != default) queryable = queryable.Take(size);
 
-        if (orderBy != null) queryable = orderBy(queryable);
+        if (orderBy != default) queryable = orderBy(queryable);
 
         return await queryable.ToListAsync(cancellationToken);
     }
 
     public static async Task<List<TEntity>> GetDynamicListAsync<TEntity>(this DbSet<TEntity> entity,
         DynamicModel dynamic,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         int size = default,
         bool enableTracking = true,
         CancellationToken cancellationToken = default) where TEntity : class
     {
         IQueryable<TEntity> queryable = entity.AsQueryable().ToDynamic(dynamic);
 
-        if (predicate != null) queryable = queryable.Where(predicate);
+        if (!enableTracking) queryable = queryable.AsNoTracking();
+
+        if (predicate != default) queryable = queryable.Where(predicate);
 
         if (size != default) queryable = queryable.Take(size);
 
-        if (!enableTracking) queryable = queryable.AsNoTracking();
-
-        if (include != null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
         return await queryable.ToListAsync(cancellationToken);
     }
 
     public static async Task<Paginate<TEntity>> GetPaginatedListAsync<TEntity>(this DbSet<TEntity> entity,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         int index = 1,
         int size = 10,
         bool enableTracking = true,
@@ -188,30 +188,30 @@ public static class EfCoreExtension
 
         if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        if (include != null) queryable = include(queryable);
+        if (include != default) queryable = include(queryable);
 
-        if (predicate != null) queryable = queryable.Where(predicate);
+        if (predicate != default) queryable = queryable.Where(predicate);
 
-        if (orderBy != null) queryable = orderBy(queryable);
+        if (orderBy != default) queryable = orderBy(queryable);
 
         return await queryable.ToPaginateAsync(index, size, from: 1, cancellationToken);
     }
 
     public static Task<Paginate<TEntity>> GetPaginatedDynamicListAsync<TEntity>(this DbSet<TEntity> entity,
         DynamicModel dynamic,
-        Expression<Func<TEntity, bool>>? predicate = null,
-        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,
+        Expression<Func<TEntity, bool>>? predicate = default,
+        Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = default,
         int index = 1,
         int size = 10,
         bool enableTracking = true) where TEntity : class
     {
         IQueryable<TEntity> queryable = entity.AsQueryable().ToDynamic(dynamic);
 
-        if (predicate != null) queryable = queryable.Where(predicate);
-
         if (!enableTracking) queryable = queryable.AsNoTracking();
 
-        if (include != null) queryable = include(queryable);
+        if (predicate != default) queryable = queryable.Where(predicate);
+
+        if (include != default) queryable = include(queryable);
 
         return queryable.ToPaginateAsync(index, size, from: 1);
     }
