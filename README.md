@@ -46,7 +46,7 @@ If you find this project helpful or just want to support my work, consider buyin
 1. Add the `EfCore.Crud.Helpers` package to your project.
 
 ```bash
-dotnet add package EfCore.Crud.Helpers --version 1.1.1
+dotnet add package EfCore.Crud.Helpers --version 1.1.2
 ```
 
 ## Usage

@@ -8,24 +8,26 @@ public static class PredicateExtension
         this Expression<Func<T, bool>> expr1,
         Expression<Func<T, bool>> expr2)
     {
-        ParameterExpression param = expr1.Parameters[0];
+        ParameterExpression target = expr1.Parameters[0];
+        ParameterExpression source = expr2.Parameters[0];
 
         BinaryExpression body = Expression.AndAlso(left: expr1.Body, right: expr2.Body
-            .ReplaceParameter(source: expr2.Parameters[0], target: param));
+            .ReplaceParameter(source: source, target: target));
 
-        return Expression.Lambda<Func<T, bool>>(body, param);
+        return Expression.Lambda<Func<T, bool>>(body, source);
     }
 
     public static Expression<Func<T, bool>> Or<T>(
         this Expression<Func<T, bool>> expr1,
         Expression<Func<T, bool>> expr2)
     {
-        ParameterExpression param = expr1.Parameters[0];
+        ParameterExpression target = expr1.Parameters[0];
+        ParameterExpression source = expr2.Parameters[0];
 
         BinaryExpression body = Expression.OrElse(left: expr1.Body, right: expr2.Body
-            .ReplaceParameter(source: expr2.Parameters[0], target: param));
+            .ReplaceParameter(source: source, target: target));
 
-        return Expression.Lambda<Func<T, bool>>(body, param);
+        return Expression.Lambda<Func<T, bool>>(body, target);
     }
 
     public static Expression<Func<T, bool>> Not<T>(this Expression<Func<T, bool>> expr)
@@ -49,8 +51,8 @@ public static class PredicateExtension
     {
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            return node == source 
-                ? target 
+            return node == source
+                ? target
                 : base.VisitParameter(node);
         }
     }
